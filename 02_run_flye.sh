@@ -1,0 +1,1 @@
+flye -o flye_result --threads 32 --nano-raw /data/yiqian/soil/pipeline/00_quality_control/01_trim_filter_data/ont/porechop/cpsnj16_ont_trim_filter_500_porechop.fastq --meta

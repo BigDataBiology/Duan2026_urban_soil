@@ -1,0 +1,1 @@
+medaka stitch ../split_result/*.hdf ../assembly.fasta medaka.fasta

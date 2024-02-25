@@ -1,0 +1,2 @@
+source activate /data/yiqian/mambaforge/envs/masurca
+polca.sh -a medaka_polypolish.fasta -r "/data/yiqian/soil/pipeline/00_quality_control/01_trim_filter_data/cpsnj16_350.fq_trim_filter.pair.1.fq /data/yiqian/soil/pipeline/00_quality_control/01_trim_filter_data/cpsnj16_350.fq_trim_filter.pair.2.fq" -t 24 -m 2G
