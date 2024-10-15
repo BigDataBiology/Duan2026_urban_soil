@@ -1,0 +1,2 @@
+#Use MinIONQC for quality checking raw long reads
+Rscript /data/yiqian/software/MinIONQC.R -i /data/Public/soil_data/ont/sample6/sequencing_summary_PAQ46074_a820751d_16de49e3.txt -o /data/yiqian/soil/pipeline/00_quality_control/00_raw_clean_data/ont/sample6_qc

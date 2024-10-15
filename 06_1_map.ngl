@@ -1,7 +1,0 @@
-ngless "1.5"
-
-input = paired('/data/yiqian/soil/pipeline/00_quality_control/01_trim_filter_data/cpsnj15_350.fq_trim_filter.pair.1.fq', '/data/yiqian/soil/pipeline/00_quality_control/01_trim_filter_data/cpsnj15_350.fq_trim_filter.pair.2.fq', singles='/data/yiqian/soil/pipeline/00_quality_control/01_trim_filter_data/cpsnj15_350.fq_trim_filter.singles.fq')
-
-mapped_contig = map(input, fafile='medaka_polypolish.fasta.PolcaCorrected.fa')
-
-write(mapped_contig,ofile='medaka_polypolish.fasta.PolcaCorrected.sam')

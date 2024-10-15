@@ -1,0 +1,7 @@
+ngless "1.5"
+
+input = paired('sample1_350.fq_trim_filter.pair.1.fq', 'sample1_350.fq_trim_filter.pair.2.fq', singles='sample1_350.fq_trim_filter.singles.fq')
+
+mapped_contig = map(input, fafile='medaka_polypolish.fasta.PolcaCorrected.fa')
+
+write(mapped_contig,ofile='medaka_polypolish.fasta.PolcaCorrected.sam')

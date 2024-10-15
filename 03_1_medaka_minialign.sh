@@ -1,2 +1,0 @@
-export PATH=/data/yiqian/software/minimap2-2.26_x64-linux:$PATH
-mini_align -i /data/yiqian/soil/pipeline/00_quality_control/01_trim_filter_data/ont/porechop/cpsnj16_ont_trim_filter_500_porechop.fastq -r assembly.fasta -P -m -p calls_to_draft.bam -t 24
