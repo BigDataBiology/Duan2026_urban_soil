@@ -1,0 +1,7 @@
+ngless "1.5"
+
+input = paired(ARGV[1],ARGV[2],singles=ARGV[3])
+
+mapped_contig = map(input, fafile=ARGV[4])
+
+write(mapped_contig,ofile=ARGV[5])
