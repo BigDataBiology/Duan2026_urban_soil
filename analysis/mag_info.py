@@ -158,6 +158,25 @@ def mimag(infile,outfile):
                     else:
                         out.write(f'{line.strip()}\tF\n')
 
+def cal_aro(infile,outfile):
+    sample_aro = {}
+    with open(infile,'rt') as f:
+        for line in f:
+            linelist = line.strip().split('\t')
+            sample = linelist[0]
+            aro = linelist[17]
+            arolist = aro.split(';')
+            if sample not in sample_aro.keys():
+                sample_aro[sample] = set()
+            else:
+                for item in arolist:
+                    sample_aro[sample].add(item)
+
+    with open(outfile,'wt') as out:
+        for key,value in sample_aro.items():
+            number = len(value)
+            out.write(f'{key}\t{number}\n')
+
 inputdir1 = '/data/Projects/urban_soil/data/UrbanSoilTables/all_mags_info/'
 infile1 = './pre-calculated_data/all_mag_info/checkm.tsv'
 infile2 = './pre-calculated_data/all_mag_info/Widb_95.csv'
@@ -172,3 +191,6 @@ outfile2 = './pre-calculated_data/sample_bins_info_mimag.tsv'
 
 add_bins_info(inputdir1,infile1,infile2,infile3,infile4,infile5,infile6,infile7,infile8,outfile1)
 mimag(outfile1,outfile2)
+
+outfile3 = './pre-calculated_data/sample_aro_number.tsv'
+cal_aro(outfile2,outfile3)
