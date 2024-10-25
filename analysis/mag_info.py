@@ -176,6 +176,22 @@ def cal_aro(infile,outfile):
         for key,value in sample_aro.items():
             number = len(value)
             out.write(f'{key}\t{number}\n')
+            
+def sgb(infile,outfile):
+    sgb_dict = {}
+    with open(infile,'rt') as f:
+        for line in f:
+            linelist = line.strip().split(',')
+            if line.startswith('genome'):
+                continue
+            else:
+                if linelist[1] not in sgb_dict.keys():
+                    sgb_dict[linelist[1]] = 1
+                else:
+                    sgb_dict[linelist[1]] += 1
+    with open(outfile,'wt') as out:
+        for key,value in sgb_dict.items():
+            out.write(f'{key}\t{value}\n')
 
 inputdir1 = '/data/Projects/urban_soil/data/UrbanSoilTables/all_mags_info/'
 infile1 = './pre-calculated_data/all_mag_info/checkm.tsv'
@@ -194,3 +210,6 @@ mimag(outfile1,outfile2)
 
 outfile3 = './pre-calculated_data/sample_aro_number.tsv'
 cal_aro(outfile2,outfile3)
+
+outfile4 = 'sgb.tsv'
+sgb(infile7,outfile4)
