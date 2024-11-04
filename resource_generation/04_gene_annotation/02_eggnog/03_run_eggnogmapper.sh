@@ -1,1 +1,0 @@
-emapper.py -i snj15.faa -o snj15 --cpu 10
