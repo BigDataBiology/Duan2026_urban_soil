@@ -120,4 +120,4 @@ outfile4 = 'aro_number.tsv'
 outfile5 = 'drug_number.tsv'
 outfile6 = 'mechanism_number.tsv'
 outfile7 = 'family_number.tsv'
-cal(infile3,outfile4,outfile5,outfile6,outfile7)
+cal(outfile3,outfile4,outfile5,outfile6,outfile7)
