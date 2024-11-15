@@ -110,6 +110,17 @@ def add_rgi(rgi,name):
         aro = f'NA\tNA\tNA\tNA'
     return aro
 
+def store_gc(infile9):
+    mags = {}
+    with open(infile9,'rt') as f:
+        for line in f:
+            linelist = line.strip().split('\t')
+            sample = linelist[0].split('/')[6]
+            magname = linelist[0].split('/')[7].split('.')[0]
+            name = f'{sample}_{magname}'
+            mags[name] = linelist[1]
+    return mags
+
 def combine_info(inputdir1,samplename,checkm,ref_95,ref_99,gtdb,rgi):
     infile = f'{inputdir1}/{samplename}_bins_info.tsv'
     info,bin = extract_info(infile)
@@ -120,7 +131,7 @@ def combine_info(inputdir1,samplename,checkm,ref_95,ref_99,gtdb,rgi):
     aro = add_rgi(rgi,newname)
     return newname,info,com,con,quality,drep_95,drep_99,tax,aro
             
-def add_bins_info(inputdir1,infile1,infile2,infile3,infile4,infile5,infile6,infile7,infile8,outfile1):
+def add_bins_info(inputdir1,infile1,infile2,infile3,infile4,infile5,infile6,infile7,infile8,infile9,outfile1):
     snj = ['snj01','snj02','snj03','snj04','snj08','snj09','snj10','snj11','snj13','snj14','snj15','snj16','snj19','snj20']
     cpsnj = ['cpsnj01','cpsnj02','cpsnj03','cpsnj04','cpsnj08','cpsnj09','cpsnj10','cpsnj11','cpsnj13','cpsnj14','cpsnj15','cpsnj16','cpsnj19','cpsnj20']
 
@@ -131,19 +142,20 @@ def add_bins_info(inputdir1,infile1,infile2,infile3,infile4,infile5,infile6,infi
     gtdb = store_gtdb(infile6)
     sgb = store_sgb(infile7)
     rgi = store_rgi(infile8)
+    gc = store_gc(infile9)
 
     with open(outfile1,'wt') as out:
-        out.write(f'Sample\tMag ID\tnbps\tNr contigs\tN50\tL50\tCompleteness\tContamination\tQuality\tDrep_95\tDrep_99\tS16\tS23\tS5\tUnique tRNA\tGTDB\tSGB\tARO\tDrug Class\tResistance Mechanism\tAMR Gene Family\n')
+        out.write(f'Sample\tMag ID\tnbps\tNr contigs\tN50\tL50\tCompleteness\tContamination\tQuality\tDrep_95\tDrep_99\tS16\tS23\tS5\tUnique tRNA\tGTDB\tSGB\tARO\tDrug Class\tResistance Mechanism\tAMR Gene Family\tGC_content\n')
         for samplename in snj:
             newname,info,com,con,quality,drep_95,drep_99,tax,aro = combine_info(inputdir1,samplename,checkm,ref_95,ref_99,gtdb,rgi)
-            out.write(f'{samplename}\t{newname}\t{info}\t{com}\t{con}\t{quality}\t{drep_95}\t{drep_99}\t{barrnap[newname]}\t{trnascan[newname]}\t{tax}\t{sgb[newname]}\t{aro}\n')
+            out.write(f'{samplename}\t{newname}\t{info}\t{com}\t{con}\t{quality}\t{drep_95}\t{drep_99}\t{barrnap[newname]}\t{trnascan[newname]}\t{tax}\t{sgb[newname]}\t{aro}\t{gc[newname]}\n')
         for samplename in cpsnj:
             newname,info,com,con,quality,drep_95,drep_99,tax,aro = combine_info(inputdir1,samplename,checkm,ref_95,ref_99,gtdb,rgi)
-            out.write(f'{samplename}\t{newname}\t{info}\t{com}\t{con}\t{quality}\t{drep_95}\t{drep_99}\t{barrnap[newname]}\t{trnascan[newname]}\t{tax}\t{sgb[newname]}\t{aro}\n')
+            out.write(f'{samplename}\t{newname}\t{info}\t{com}\t{con}\t{quality}\t{drep_95}\t{drep_99}\t{barrnap[newname]}\t{trnascan[newname]}\t{tax}\t{sgb[newname]}\t{aro}\t{gc[newname]}\n')
         for i in range(1,31):
             samplename = f'sample{i}'
             newname,info,com,con,quality,drep_95,drep_99,tax,aro = combine_info(inputdir1,samplename,checkm,ref_95,ref_99,gtdb,rgi)
-            out.write(f'{samplename}\t{newname}\t{info}\t{com}\t{con}\t{quality}\t{drep_95}\t{drep_99}\t{barrnap[newname]}\t{trnascan[newname]}\t{tax}\t{sgb[newname]}\t{aro}\n')
+            out.write(f'{samplename}\t{newname}\t{info}\t{com}\t{con}\t{quality}\t{drep_95}\t{drep_99}\t{barrnap[newname]}\t{trnascan[newname]}\t{tax}\t{sgb[newname]}\t{aro}\t{gc[newname]}\n')
 
 def mimag(infile,outfile):
     with open(outfile,'wt') as out:
@@ -202,8 +214,9 @@ infile5 = './pre-calculated_data/all_mag_info/trnascan.tsv'
 infile6 = './pre-calculated_data/all_mag_info/gtdb.tsv'
 infile7 = './pre-calculated_data/all_mag_info/Cdb_95.csv'
 infile8 = './pre-calculated_data/all_mag_info/rgi_mags_strict_stats.tsv'
+infile9 = './pre-calculated_data/mags_gc.txt'
 outfile1 = './pre-calculated_data/sample_bins_info.tsv'
-outfile2 = './pre-calculated_data/sample_bins_info_mimag.tsv'
+outfile2 = './pre-calculated_data/sample_bins_info_mimag_gc.tsv'
 
 add_bins_info(inputdir1,infile1,infile2,infile3,infile4,infile5,infile6,infile7,infile8,outfile1)
 mimag(outfile1,outfile2)
