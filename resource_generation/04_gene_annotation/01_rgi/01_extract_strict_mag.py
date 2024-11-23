@@ -16,7 +16,7 @@ def strict(infile1,infile2,outfile):
                 if line.startswith('ORF'):
                     out.write(f'MAG\t{line}')
                 else:
-                    if linelist[5] == 'Strict':
+                    if linelist[5] == 'Strict' or linelist[5] == 'Perfect':
                         parts = linelist[0].split(' # ')[0].split('_')
                         if len(parts) == 5:
                             contig_name = f'{parts[1]}_{parts[2]}_{parts[3]}'

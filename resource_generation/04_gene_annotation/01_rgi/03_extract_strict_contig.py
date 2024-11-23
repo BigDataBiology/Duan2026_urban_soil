@@ -4,7 +4,7 @@ def filter_strict(infile,outfile,name):
         with open(infile,'rt') as f:
             for line in f:
                 linelist = line.strip().split('\t')
-                if linelist[5] == 'Strict':
+                if linelist[5] == 'Strict' or linelist[5] == 'Perfect':
                     out.write(f'{name}_{line}')
 
 def map_gene(infile1,infile2,outfile):
@@ -100,7 +100,7 @@ filter_strict(infile1,outfile1,name)
 
 infile2 = 'contig_rgi_strict.tsv'
 infile3 = 'contigs_dedup.faa'
-outfile2 = 'contig_rgi_strict_dedup.tsv'
+outfile2 = 'contig_rgi_pf_st_dedup.tsv'
 map_gene(infile2,infile3,outfile2)
 
 outfile3 = 'contig_sample_aro_number.tsv'
