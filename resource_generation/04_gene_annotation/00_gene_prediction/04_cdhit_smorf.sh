@@ -1,0 +1,1 @@
+cd-hit -i all.mapped.smorfs_dedup.faa -o all.mapped.smorfs_dedup_cdhit.faa -c 0.9 -T 64 -aL 0.9 -aS 0.9 -M 0 -d 100

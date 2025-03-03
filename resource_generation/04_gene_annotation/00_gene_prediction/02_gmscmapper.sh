@@ -1,0 +1,2 @@
+prefix="sample1"
+gmsc-mapper -i /data/Projects/urban_soil/data/UrbanSoilAssemblies/${prefix}_medaka_polypolish.fasta.PolcaCorrected.fa.gz --dbdir ~/istbi/GMSC/final_frozen/mapper_index/new -o ${prefix}_output --id 0.9 -t 40
