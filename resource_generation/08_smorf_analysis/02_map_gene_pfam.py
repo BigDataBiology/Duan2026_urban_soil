@@ -1,3 +1,15 @@
+def filter_eggnog(infile,outfile):
+    with open(outfile,'wt') as out:
+        with open(infile,'rt') as f:
+            for line in f:
+                linelist = line.strip().split('\t')
+                if float(linelist[2]) <0.00001:
+                    out.write(line)
+
+infile = 'all.emapper.annotations.tsv'
+outfile = 'all.emapper.annotations.filter.tsv'
+filter_eggnog(infile,outfile)
+
 def map_eggnog(infile1,infile2,outfile1):
     eggnog_dict = {}
     with open(infile1,'rt') as f:
@@ -43,7 +55,7 @@ def map_eggnog(infile1,infile2,outfile1):
 
                 out1.write(f'{linelist[0]}\t{final_up}\t{final_down}\n')
 
-infile1 = '~/soil/pipeline/07_gene_prediction/eggnog/all.emapper.annotations.filter.tsv'
+infile1 = 'all.emapper.annotations.filter.tsv'
 infile2 = 'smorf_genes_10.tsv'
 outfile1 = 'smorf_genes_10_eggnog.tsv'
 map_eggnog(infile1,infile2,outfile1) 

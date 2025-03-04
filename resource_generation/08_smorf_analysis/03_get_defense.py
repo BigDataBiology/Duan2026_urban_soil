@@ -1,3 +1,25 @@
+def map_pfam(infile1,infile2,outfile):
+    pfam_dict = {}
+    with open(infile1,'rt') as f:
+        for line in f:
+            linelist = line.strip().split('\t')
+            pfam = 'pfam'+linelist[0].replace('PF','')
+            pfam_dict[pfam] = linelist[3]
+    with open(outfile,'wt') as out:
+        with open(infile2,'rt') as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith('pfam'):
+                    if line in pfam_dict.keys():
+                        out.write(f'{pfam_dict[line]}\n')
+                else:
+                    out.write(f'{line}\n')
+
+infile1 = 'Pfam-A.clans.tsv'
+infile2 = 'defense.tsv'
+outfile = 'defense_id.tsv'
+map_pfam(infile1,infile2,outfile)
+
 def get_defense(infile1,infile2,outfile):
     with open(infile1,'rt') as f:
         defense = set()
