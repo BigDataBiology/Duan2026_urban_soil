@@ -1,0 +1,3 @@
+#checkm_all.csv and spire_soil_fa_gz.csv is the checkm results
+dRep dereplicate ~/soil/pipeline/12_compare/result --genomeInfo ~/soil/pipeline/12_compare/code/checkm_all.csv -g ~/soil/pipeline/12_compare/data/sgb/*.fa -p 40 -comp 50 -con 10 -sa 0.95
+dRep dereplicate ~/soil/pipeline/12_compare/result_spire --genomeInfo ~/soil/pipeline/12_compare/code/spire_soil_fa_gz.csv -g ~/soil/pipeline/12_compare/data/spire/spire/*.fa.gz -p 40 -comp 50 -con 10 -sa 0.95
