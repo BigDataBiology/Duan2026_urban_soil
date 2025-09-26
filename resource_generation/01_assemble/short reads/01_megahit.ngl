@@ -1,0 +1,6 @@
+ngless "1.5"
+
+input = paired('~/soil/00_raw/01_trim/ngs/CPSNJ01_350.fq_trim_filter.pair.1.fq', '~/soil/00_raw/01_trim/ngs/CPSNJ01_350.fq_trim_filter.pair.2.fq', singles='/home1/duanyq/soil/00_raw/01_trim/ngs/CPSNJ01_350.fq_trim_filter.singles.fq')
+
+assembled = assemble(input)
+write(assembled,ofile='final.contigs.fa')
