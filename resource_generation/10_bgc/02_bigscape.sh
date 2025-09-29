@@ -1,0 +1,1 @@
+bigscape cluster -i ~/soil/15_bgc/all_regions -o all_bigscape -p ~/database/pfam/Pfam-A.hmm --mix -c 8 --include-singletons
