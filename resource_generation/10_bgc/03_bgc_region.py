@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 for i in range(8,10):
-    folder_path = f'/home1/duanyq/soil/15_bgc/cpsnj0{i}/all'
+    folder_path = f'~/soil/15_bgc/cpsnj0{i}/all'
 
     for filename in os.listdir(folder_path):
         if filename.endswith(".gbk"):
