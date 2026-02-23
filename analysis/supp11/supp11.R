@@ -154,6 +154,8 @@ pal_seq <- brewer.pal(8, "YlOrBr")
 
 set.seed(2026)
 
+
+
 samples_list <- unique(genes$sample)
 
 samples_shan <- unique(genes$sample[genes$City == "Shanghai"])
