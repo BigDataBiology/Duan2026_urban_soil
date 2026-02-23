@@ -2,7 +2,7 @@
 
 This repository contains files and scripts to generate analysis and figures in the manuscript _Long-read metagenomic sequencing reveals novel lineages and functional diversity in urban soil microbiome_:
 
-> Yiqian Duan, Anna Cuscó, Chengkai Zhu, Yaozhong Zhang, Alexandre Areias Castro, Xinrun Yang, Jiabao Yu, Gaofei Jiang, Xing-Ming Zhao, Luis Pedro Coelho
+> Yiqian Duan, Anna Cuscó, Chengkai Zhu, Juan S. Inda-Díaz, Yaozhong Zhang, Alexandre Areias Castro, Xinrun Yang, Jiabao Yu, Gaofei Jiang, Xing-Ming Zhao, Luis Pedro Coelho
 
 See also the **MAG collection** at the [Urban soil MAG collection
 website](https://urban-soil-mags.netlify.app/).
@@ -43,6 +43,7 @@ The following are required for the scripts (other versions may work, we list the
 | GMSC-mapper (v.0.1.0) | https://github.com/BigDataBiology/GMSC-mapper |
 | CD-HIT (v.4.8.1) | https://github.com/weizhongli/cdhit |
 | geNomad (v.1.8.1) | https://github.com/apcamargo/genomad |
+| fARGene (v.0.1) | https://github.com/fannyhb/fargene |
 
 ## Data Availability
 
