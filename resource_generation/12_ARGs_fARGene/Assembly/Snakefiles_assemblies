@@ -1,6 +1,7 @@
 import glob, os
 import numpy as np
 
+
 sample_run_file = glob.glob("/work/microbiome/urban_soil/data/UrbanSoilAssemblies/*.fa.gz")
 runs_sizes = [os.stat(x).st_size for x in sample_run_file]
 sample_run_file_np = np.array(sample_run_file)
