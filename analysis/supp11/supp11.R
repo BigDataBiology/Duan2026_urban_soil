@@ -178,9 +178,6 @@ result_shan <- map_dfr(seq_along(samples_shan), function(k) {
 })
 
 
-result_shan %>% 
-  ggplot(aes(x = n_samples, y = n_centroids)) +
-  geom_point()
 
 samples_nan <- unique(genes$sample[genes$City != "Shanghai"])
 result_nan <- map_dfr(seq_along(unique(samples_nan)), function(k) {
