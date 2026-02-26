@@ -108,25 +108,6 @@ pal_seq <- brewer.pal(8, "YlOrBr")
 
 
 
-amrfinder_genes <- read.delim("../resource_generation/12_ARGs_fARGene/amrfinder_on_fargene_centroids95_prodigal.tsv")
-amrfinder_genes <- amrfinder_genes %>% 
-  mutate(centroid =  Protein.id) %>% 
-  mutate(centroid = sub("_1$", "", centroid)) %>% 
-  mutate(centroid = sub("_2$", "", centroid)) %>% 
-  mutate(centroid = sub("_3$", "", centroid)) %>% 
-  mutate(centroid = sub("_4$", "", centroid)) %>% 
-  mutate(centroid = sub("_5$", "", centroid)) %>% 
-  mutate(centroid = sub("_6$", "", centroid)) 
-
-amrfinder_genes <- amrfinder_genes %>% 
-  mutate(centroid = ifelse(centroid %in% genes$centroid, centroid,
-                           ifelse(Protein.id %in% genes$centroid, Protein.id, NA)))
-
-genes <- genes %>% mutate(amrfinder = ifelse(centroid %in% amrfinder_genes$centroid, 1, 0))
-genes <- genes %>% mutate(amrfinder.class = amrfinder_genes$Class[match(centroid, amrfinder_genes$centroid)])
-genes <- genes %>% mutate(amrfindersubclass = amrfinder_genes$Subclass[match(centroid, amrfinder_genes$centroid)])
-genes <- genes %>% mutate(amrfinder.hmm = amrfinder_genes$HMM.description[match(centroid, amrfinder_genes$centroid)])
-
 eggnog <- read.delim("~/Documents/GitHub/urban_soil/resource_generation/12_ARGs_fARGene/centroids.emapper.annotations", comment.char="#")
 eggnog <- eggnog %>% 
   mutate(centroid =  query) %>% 
@@ -143,21 +124,8 @@ genes <- genes %>% mutate(eggnog_pfam = eggnog$PFAMs[match(centroid, eggnog$cent
 
 genes <- genes %>% group_by(centroid) %>% slice_head(n = 1)
 
-table(genes$hmm, genes$amrfinder.class)
 table(genes$hmm, genes$eggnog_pfam)
       
-genes <- genes %>% mutate(amrfinder.class = ifelse(is.na(amrfinder.class), "Not found", amrfinder.class))
-genes <- genes %>% mutate(amrfindersubclass = ifelse(is.na(amrfindersubclass), "Not found", amrfindersubclass))
-
-col_ann = HeatmapAnnotation(
-  City = metadata$City[match(colnames(mat), metadata$Sample_id) ],
-  col = list(City = setNames(pal_8[1:2], cities)))
-
-row_ann = rowAnnotation(
-  City     = metadata$City[match(rownames(mat), metadata$Sample_id)],
-  col = list(City = setNames(pal_8[1:2], cities)),
-  show_legend = FALSE)
-
 
 
 genes$eggnog_pfam[is.na(genes$eggnog_pfam)] <- "Not found"
@@ -166,7 +134,7 @@ mat_pfam <- t(t(mat_pfam)/colSums(mat_pfam))
 mat_pfam[mat_pfam == 0] <- NA
 mat_pfam <- mat_pfam[c(rownames(mat_pfam)[!rownames(mat_pfam) %in% "Not found"],"Not found"),]
 
-# heatmap Jaccard's index
+# heatmap 
 pheat_pfam <- ComplexHeatmap::Heatmap(
   mat_pfam, cluster_rows = F, cluster_columns = F,
   col = pal_seq, na_col = "white",
@@ -180,7 +148,7 @@ mat_egg_desc <- t(t(mat_egg_desc)/colSums(mat_egg_desc))
 mat_egg_desc[mat_egg_desc == 0] <- NA
 mat_egg_desc <- mat_egg_desc[c(rownames(mat_egg_desc)[!rownames(mat_egg_desc) %in% "Not found"],"Not found"),]
 
-# heatmap Jaccard's index
+# heatmap 
 pheat_egg_desc <- ComplexHeatmap::Heatmap(
   mat_egg_desc, cluster_rows = F, cluster_columns = F,
   col = pal_seq, na_col = "white"
@@ -188,19 +156,6 @@ pheat_egg_desc <- ComplexHeatmap::Heatmap(
 pheat_egg_desc
 
 
-genes$amrfinder.class[is.na(genes$amrfinder.class)] <- "Not found"
-mat_amrfinderclass <- table(genes$amrfinder.class, genes$class)
-mat_amrfinderclass <- t(t(mat_amrfinderclass)/colSums(mat_amrfinderclass))
-mat_amrfinderclass[mat_amrfinderclass == 0] <- NA
-mat_amrfinderclass <- mat_amrfinderclass[c(rownames(mat_amrfinderclass)[!rownames(mat_amrfinderclass) %in% "Not found"],"Not found"),]
-
-# heatmap Jaccard's index
-pheat_amrfinderclass <- ComplexHeatmap::Heatmap(
-  mat_amrfinderclass, cluster_rows = F, cluster_columns = F,
-  col = pal_seq, na_col = "white"
-)
-
-pheat_amrfinderclass
 
 
 genes %>% group_by(eggnog_pfam) %>% 
@@ -211,7 +166,7 @@ genes %>% group_by(eggnog_pfam) %>%
 
 data.frame(genes %>% group_by(class, eggnog_pfam) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
 
-weird_eggnog_pfam <- c("BPD_transp_2",
+eggnog_pfam_notAMR <- c("BPD_transp_2",
                        "FtsX,MacB_PCD",
                        "MTHFR",
                        "Ribosom_S12_S23",
@@ -237,9 +192,9 @@ acetyl <- c("Acetyltransf_1",
             "Acetyltransf_8",
             "Acetyltransf_9", "Acetyltransf_9,SCP2_2")
 
-weird_eggnog_pfam <- c(weird_eggnog_pfam, acetyl)
+eggnog_pfam_notAMR <- c(eggnog_pfam_notAMR, acetyl)
 
-data.frame(genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam) %>% group_by(class, eggnog_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
+data.frame(genes %>% filter(eggnog_pfam %in% eggnog_pfam_notAMR) %>% group_by(class, eggnog_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
 
 
 eggnog_description_ok <- c(
@@ -257,7 +212,7 @@ eggnog_description_ok <- c(
   "Catalyzes the transfer of an acetyl group from acetyl- CoA to the 6'-amino group of aminoglycoside molecules conferring resistance to antibiotics containing the purpurosamine ring")
 
 
-weird_description <- c(
+eggnog_description_notAMR <- c(
 "Activator of cell division through the inhibition of FtsZ GTPase activity, therefore promoting FtsZ assembly into bundles of protofilaments necessary for the formation of the division Z ring. It is recruited early at mid-cell but it is not essential for cell division",
 "cell division through the inhibition of FtsZ GTPase activity, therefore promoting FtsZ assembly into bundles of protofilaments necessary for the formation of the division Z ring. It is recruited early at mid-cell but it is not essential for cell division",
 "Belongs to the binding-protein-dependent transport system permease family",
@@ -290,10 +245,10 @@ weird_description <- c(
 "Ribosomal RNA adenine dimethylases")
 
 
-data.frame(genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam & eggnog_description %in% weird_description) %>% group_by(class, eggnog_preferred_name) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
-data.frame(genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam & eggnog_description %in% weird_description) %>% group_by(class, eggnog_preferred_name, eggnog_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
+data.frame(genes %>% filter(eggnog_pfam %in% eggnog_pfam_notAMR & eggnog_description %in% eggnog_description_notAMR) %>% group_by(class, eggnog_preferred_name) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
+data.frame(genes %>% filter(eggnog_pfam %in% eggnog_pfam_notAMR & eggnog_description %in% eggnog_description_notAMR) %>% group_by(class, eggnog_preferred_name, eggnog_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
 
-weird_names <-c(
+gene_names_eggnog_notAMR <-c(
   "metF",
   "rbsC",
   "rpsL", #unspecific/mutations confer AMR
@@ -302,7 +257,7 @@ weird_names <-c(
   "metF", #unspecific/mutations confer AMR
   "ksgA") #unspecific/mutations confer AMR
   
-unspecific_names <- c(
+genes_that_are_potentially_amr <- c(
   "rpsL", 
   "ksgA",
   "metF") 
@@ -311,9 +266,9 @@ unspecific_names <- c(
 
 genes <- genes %>% 
   mutate(eggnog_no_amr_info = 
-           ifelse(eggnog_pfam %in% weird_eggnog_pfam & 
-                    eggnog_description %in% weird_description & 
-                    eggnog_preferred_name %in% weird_names, "no AMR info","yes AMR info"))
+           ifelse(eggnog_pfam %in% eggnog_pfam_notAMR & 
+                    eggnog_description %in% eggnog_description_notAMR & 
+                    eggnog_preferred_name %in% gene_names_eggnog_notAMR, "no AMR info","yes AMR info"))
   
 data.frame(genes %>% group_by(class, eggnog_no_amr_info) %>% summarise(n = n()) %>% mutate(p = n/sum(n)))
 data.frame(genes %>% group_by( eggnog_no_amr_info) %>% summarise(n = n()) %>% mutate(p = n/sum(n)))
@@ -322,15 +277,15 @@ data.frame(genes %>% group_by( eggnog_no_amr_info) %>% summarise(n = n()) %>% mu
 
 genes %>% filter(eggnog_no_amr_info %in% "no AMR info") %>% group_by(class, eggnog_description, eggnog_preferred_name, eggnog_pfam) %>% summarise(n = n()) %>% mutate(p = n / sum(n))
 
-genes %>% mutate(in_pfam = ifelse(eggnog_pfam %in% weird_eggnog_pfam, "no amr", "yes amr")) %>% group_by(in_pfam) %>% summarise(n = n()) %>% mutate(p = n / sum(n))
-genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam) %>%  mutate(in_description = ifelse(eggnog_description %in% weird_description, "no amr", "yes amr")) %>% group_by(in_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n))
-genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam, eggnog_description %in% weird_description) %>%  mutate(in_genename = ifelse(eggnog_preferred_name %in% weird_names, "no amr", "yes amr")) %>% group_by(in_genename) %>% summarise(n = n()) %>% mutate(p = n / sum(n))
+genes %>% mutate(in_pfam = ifelse(eggnog_pfam %in% eggnog_pfam_notAMR, "no amr", "yes amr")) %>% group_by(in_pfam) %>% summarise(n = n()) %>% mutate(p = n / sum(n))
+genes %>% filter(eggnog_pfam %in% eggnog_pfam_notAMR) %>%  mutate(in_description = ifelse(eggnog_description %in% eggnog_description_notAMR, "no amr", "yes amr")) %>% group_by(in_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n))
+genes %>% filter(eggnog_pfam %in% eggnog_pfam_notAMR, eggnog_description %in% eggnog_description_notAMR) %>%  mutate(in_genename = ifelse(eggnog_preferred_name %in% gene_names_eggnog_notAMR, "no amr", "yes amr")) %>% group_by(in_genename) %>% summarise(n = n()) %>% mutate(p = n / sum(n))
 
 
 
-amr_eggnog_summary <- rbind(genes %>% mutate(in_pfam = ifelse(eggnog_pfam %in% weird_eggnog_pfam, "no amr", "yes amr")) %>% group_by(in_pfam) %>% summarise(n = n()) %>% mutate(p = n / sum(n)) %>% filter(in_pfam %in% "yes amr") %>% mutate(level = "pfam") %>% rename(amr = in_pfam),
-genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam) %>%  mutate(in_description = ifelse(eggnog_description %in% weird_description, "no amr", "yes amr")) %>% group_by(in_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n)) %>% filter(in_description %in% "yes amr") %>% mutate(level = "description") %>% rename(amr = in_description),
-genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam, eggnog_description %in% weird_description) %>%  mutate(in_genename = ifelse(eggnog_preferred_name %in% weird_names, "no amr", "yes amr")) %>% group_by(in_genename) %>% summarise(n = n()) %>% mutate(p = n / sum(n))  %>% mutate(level = "gene name") %>% rename(amr = in_genename))
+amr_eggnog_summary <- rbind(genes %>% mutate(in_pfam = ifelse(eggnog_pfam %in% eggnog_pfam_notAMR, "no amr", "yes amr")) %>% group_by(in_pfam) %>% summarise(n = n()) %>% mutate(p = n / sum(n)) %>% filter(in_pfam %in% "yes amr") %>% mutate(level = "pfam") %>% rename(amr = in_pfam),
+genes %>% filter(eggnog_pfam %in% eggnog_pfam_notAMR) %>%  mutate(in_description = ifelse(eggnog_description %in% eggnog_description_notAMR, "no amr", "yes amr")) %>% group_by(in_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n)) %>% filter(in_description %in% "yes amr") %>% mutate(level = "description") %>% rename(amr = in_description),
+genes %>% filter(eggnog_pfam %in% eggnog_pfam_notAMR, eggnog_description %in% eggnog_description_notAMR) %>%  mutate(in_genename = ifelse(eggnog_preferred_name %in% gene_names_eggnog_notAMR, "no amr", "yes amr")) %>% group_by(in_genename) %>% summarise(n = n()) %>% mutate(p = n / sum(n))  %>% mutate(level = "gene name") %>% rename(amr = in_genename))
 
 amr_eggnog_summary %>% arrange(desc(n)) %>% mutate(p = n / sum(n))
 
