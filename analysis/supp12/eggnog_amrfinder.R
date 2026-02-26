@@ -210,6 +210,7 @@ genes %>% group_by(eggnog_pfam) %>%
   mutate(P = sum(p))
 
 data.frame(genes %>% group_by(class, eggnog_pfam) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
+
 weird_eggnog_pfam <- c("BPD_transp_2",
                        "FtsX,MacB_PCD",
                        "MTHFR",
@@ -225,8 +226,20 @@ weird_eggnog_pfam <- c("BPD_transp_2",
                        "EFG_C,EFG_II,EFG_IV,GTP_EFTU",
                        "EFG_C,EFG_II,EFG_IV,GTP_EFTU,GTP_EFTU_D2", "-")
 
-genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam) %>% group_by(class, eggnog_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n))
+acetyl <- c("Acetyltransf_1", 
+            "Acetyltransf_1,Acetyltransf_10", 
+            "Acetyltransf_1,Acetyltransf_10,Acetyltransf_7,Acetyltransf_9",
+            "Acetyltransf_1,Acetyltransf_4",
+            "Acetyltransf_1,Acetyltransf_9",
+            "Acetyltransf_1,HAD_2", 
+            "Acetyltransf_3,Acetyltransf_8",
+            "Acetyltransf_3,Acetyltransf_8,Hexapep",
+            "Acetyltransf_8",
+            "Acetyltransf_9", "Acetyltransf_9,SCP2_2")
 
+weird_eggnog_pfam <- c(weird_eggnog_pfam, acetyl)
+
+data.frame(genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam) %>% group_by(class, eggnog_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
 
 
 eggnog_description_ok <- c(
@@ -238,8 +251,10 @@ eggnog_description_ok <- c(
   "Penicillin binding protein transpeptidase domain",
   "penicillin binding",
   "fluoroquinolone resistance protein",
-  "Tetracycline resistance protein"
-)
+  "Tetracycline resistance protein",
+  "Aminoglycoside 2'-N-acetyltransferase",
+  "Metallo-beta-lactamase superfamily",
+  "Catalyzes the transfer of an acetyl group from acetyl- CoA to the 6'-amino group of aminoglycoside molecules conferring resistance to antibiotics containing the purpurosamine ring")
 
 
 weird_description <- c(
@@ -259,22 +274,38 @@ weird_description <- c(
 "Elongation factor G, domain IV",
 "GTP-binding protein",
 "elongation factor G",
-"-")
+"Acetyltransferase (GNAT) domain",
+"PFAM GCN5-related N-acetyltransferase",
+"acetyltransferase",
+"transferase activity, transferring acyl groups",
+"Acetyltransferase (GNAT) family",
+"FR47-like protein",
+"PFAM Acetyltransferase (GNAT) family",
+"-acetyltransferase",
+"COG1670 acetyltransferases, including N-acetylases of ribosomal proteins",
+"Hexapeptide repeat of succinyl-transferase",
+"Siderophore biosynthesis protein domain",
+"phosphinothricin N-acetyltransferase activity",
+"Thiolesterase that catalyzes the hydrolysis of S-D- lactoyl-glutathione to form glutathione and D-lactic acid",
+"Ribosomal RNA adenine dimethylases")
 
 
-
-genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam & eggnog_description %in% weird_description) %>% group_by(class, eggnog_preferred_name) %>% summarise(n = n()) %>% mutate(p = n / sum(n))
+data.frame(genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam & eggnog_description %in% weird_description) %>% group_by(class, eggnog_preferred_name) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
+data.frame(genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam & eggnog_description %in% weird_description) %>% group_by(class, eggnog_preferred_name, eggnog_description) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
 
 weird_names <-c(
   "metF",
   "rbsC",
   "rpsL", #unspecific/mutations confer AMR
   "-",
+  "XK27_05885", #no information found on this gene
+  "metF", #unspecific/mutations confer AMR
   "ksgA") #unspecific/mutations confer AMR
   
 unspecific_names <- c(
   "rpsL", 
-  "ksgA") 
+  "ksgA",
+  "metF") 
 
 
 
@@ -304,18 +335,28 @@ genes %>% filter(eggnog_pfam %in% weird_eggnog_pfam, eggnog_description %in% wei
 amr_eggnog_summary %>% arrange(desc(n)) %>% mutate(p = n / sum(n))
 
 
-# number of genes | percentage of the total | description
-# 30851 | 96.4% found at the pfam level
-# 760 | 2.38%  found at the description level
-# 173 | 0.541% found at the preferred gene name level
-# 214 | 0.669% no info on amr (see note below)
-# 
-# of the 214 with no amr info:
+# number of genes proportion level      
+# 25838   pfam level
+# 1349  description level
+# 412  preferred gene name level
+# 4399 no information
+
+data.frame(genes %>% filter(eggnog_no_amr_info %in% "no AMR info") %>% group_by(hclass, eggnog_description, eggnog_preferred_name, eggnog_pfam) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
+data.frame(genes %>% filter(eggnog_no_amr_info %in% "no AMR info") %>% group_by(class, eggnog_preferred_name, eggnog_pfam) %>% summarise(n = n()) %>% mutate(p = n / sum(n)))
+
+genes %>% filter(eggnog_no_amr_info %in% "no AMR info") %>% group_by(hclass, eggnog_description, eggnog_preferred_name, eggnog_pfam) %>% 
+  filter(grepl("Acetyl", eggnog_pfam)) %>% summarise(n = n()) %>% ungroup() %>% summarise(N = sum(n))
+
+
+# of the 4399 with no amr info:
+# 4080 are acetyltransferases categorized by fARGene as acetyltransferases, the number could be linked to the discovered class https://www.nature.com/articles/s42003-023-05174-6
 # 71 FAD binding - tetracycline inactivation enzymes (that is how some of them work https://pmc.ncbi.nlm.nih.gov/articles/PMC7229144/)
-# 118 methyltransferases - that is the function of macrolide methyltransferases
-# 7 out of 17766 beta lactamase b3 no info on resistance
+# 120 methyltransferases - that is the function of macrolide methyltransferases, and a group of RrnaAD (pfam category of this 120 genes) are resistance genes
+# 110 out of 17766 beta lactamase b3 no info on resistance
 # 4 tet rpg no info on resistance
 # 14 mph no info on resistance
+
+
 
 
 
