@@ -20,7 +20,7 @@ snakemake -s Snakefile_mags -p -j 20 --use-conda
 
 ### Run fARGene in mags data 
 ```bash
-cd /work/microbiome/users/juan/Urban_soil/Assembly/
+cd /work/microbiome/users/juan/Urban_soil/contigs/
 snakemake -s Snakefile_mags -p -j 20 --use-conda
 ```
 
@@ -28,7 +28,7 @@ snakemake -s Snakefile_mags -p -j 20 --use-conda
 ```bash
 conda activate seqkit
 
-cd /work/microbiome/users/juan/Urban_soil/Assembly/fargene_predicted
+cd /work/microbiome/users/juan/Urban_soil/contigs/fargene_predicted
 for file in *.fasta; do
     seqkit rename -n "$file" -o file.tmp
     mv file.tmp "../fargene_predicted_suffix/$file"
@@ -42,9 +42,9 @@ for file in *.fasta; do
 done
 ```
 
-### extract the name of the sequences, add the gene class and source file
+### Extract the name of the sequences, add the gene class and source file
 ```bash
-cd /work/microbiome/users/juan/Urban_soil/Assembly
+cd /work/microbiome/users/juan/Urban_soil/contigs
 for filename in fargene_predicted_suffix/*.fasta; do
     tag="${filename##*/}"
     #tag="${tag#*.gz-}"
@@ -68,7 +68,7 @@ done
 ```
 
 
-### run CD-HIT on the predicted genes from MAGs
+### Run CD-HIT on the predicted genes from MAGs
 ```bash
 conda activate cdhit-env
 cd /work/microbiome/users/juan/Urban_soil/Genes/mags
@@ -82,18 +82,40 @@ diamond makedb --in ../cdhit/cluster95 -d ref_db
 diamond blastp -q ../predicted_genes_with_class_clustering.fasta -d ref_db.dmnd -o closest_hits.tsv --max-target-seqs 1 --outfmt 6 qseqid sseqid pident evalue bitscore
 ```
 
-### run vsearch on th predicted genes from assembly
+### Run vsearch on th predicted genes from assembly
 ```bash
 conda activate vsearch-env
-cd /work/microbiome/users/juan/Urban_soil/Assembly/
+cd /work/microbiome/users/juan/Urban_soil/contigs/
 vsearch --cluster_fast ../predicted_genes_with_class_clustering.fasta --id 0.95 --centroids centroids95.fasta --uc clusters95.uc --threads
 ```
 
-### run RGI on the genes from MAGs
+### Run RGI on the genes from MAGs
 ```bash
 cd /work/microbiome/users/juan/Urban_soil/Genes/mags/rgi
 zcat /work/microbiome/urban_soil/data/UrbanSoilGenes/gene_prediction/mags/mags.faa.gz | sed 's/\*//g' | gzip > mags_clean.faa.gz
 conda activate RGI
 rgi main -a DIAMOND -i mags_clean.faa.gz -o rgi  --local --clean -t protein -n 16
 ```
+
+
+### Running AMRFinderPlus on fARGene results
+```bash
+cd /work/microbiome/users/juan/Urban_soil/Genes/contigs/clusters
+conda activate seqkit
+seqkit translate --frame 6 centroids.fasta |seqkit rename -n |seqkit sort -l -r | seqkit replace -p "_[\d]+$" -r "" | seqkit rmdup -n > centroids_longest_orf.faa
+
+cd ../amrfinder
+conda activate amrfinder
+amrfinder -p ../clusters/centroids_longest_orf.faa > amrfinder_on_fargene_centroids95.tsv
+
+conda activate fargene
+prodigal -i ../clusters/centroids.fasta -a prodigal_centroids.faa  -p meta
+amrfinder -p prodigal_centroids.faa > amrfinder_on_fargene_centroids95_prodigal.tsv
+
+
+cd /work/microbiome/users/juan/Urban_soil/Genes/mags/amrfinder
+amrfinder -p ../cdhit/cluster95 > amrfinder_on_fargene_centroids95.tsv
+
+```
+
 
