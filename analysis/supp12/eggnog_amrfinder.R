@@ -15,18 +15,28 @@ library(ggpmisc)
 
 setwd("~/Documents/GitHub/urban_soil/analysis/")
 
-gene_classes <- data.frame(rbind(
-  c("aac2p",	"aminoglycoside acetyltransferase",	"aac2p", "aminoglycoside"),
-  c("aac3_1",	"aminoglycoside acetyltransferase",	"aac3", "aminoglycoside"), c("aac3_2",	"aminoglycoside acetyltransferase",	"aac3", "aminoglycoside"),
-  c("aac6p_1",	"aminoglycoside acetyltransferase",	"aac6p'", "aminoglycoside"), c("aac6p_2",	"aminoglycoside acetyltransferase",	"aac6p'", "aminoglycoside"),
-  c("aac6p_3",	"aminoglycoside acetyltransferase",	"aac6p'", "aminoglycoside"), c("aph2b",	"aminoglycoside phosphotransferase", "aph2''", "aminoglycoside"),
-  c("aph3p",	"aminoglycoside phosphotransferase", "aph3'", "aminoglycoside"), c("aph6p",	"aminoglycoside phosphotransferase", "aph6'", "aminoglycoside"),
-  c("class_a",	"beta-lactamase A",	"beta-lactamase A", "beta-lactamase"), c("class_b1_b2",	"beta-lactamase B",	"beta-lactamase B1B2", "beta-lactamase"),
-  c("class_b3",	"beta-lactamase B",	"beta-lactamase B3", "beta-lactamase"), c("class_c",	"beta-lactamase C",	"beta-lactamase C", "beta-lactamase"),
-  c("class_d1",	"beta-lactamase D",	"beta-lactamase D", "beta-lactamase"), c("class_d2",	"beta-lactamase D",	"beta-lactamase D", "beta-lactamase"),
-  c("erm_1",	"macrolide erm", "erm", "macrolide"), c("erm_2",	"macrolide erm", "erm",	'macrolide'),
-  c("mph",	"macrolide mph", "mph",	"macrolide"), c("qnr",	"qrn", "qnr", "qnr"), c("tet_efflux",	"tetracycline efflux pump", "tet efflux", "tetracycline"),
-  c("tet_enzyme",	"tetracycline inactivating enzymes", "tet enzyme", "tetracycline"), c("tet_rpg",	"tetracycline ribosomal protection genes", "tet rpg", "tetracycline")))
+gene_classes <- data.frame(rbind(c("aac2p",	"aminoglycoside acetyltransferase",	"aac2'", "aminoglycoside"),
+                                 c("aac3_1",	"aminoglycoside acetyltransferase",	"aac3", "aminoglycoside"), 
+                                 c("aac3_2",	"aminoglycoside acetyltransferase",	"aac3", "aminoglycoside"),
+                                 c("aac6p_1",	"aminoglycoside acetyltransferase",	"aac6'", "aminoglycoside"), 
+                                 c("aac6p_2",	"aminoglycoside acetyltransferase",	"aac6'", "aminoglycoside"),
+                                 c("aac6p_3",	"aminoglycoside acetyltransferase",	"aac6'", "aminoglycoside"), 
+                                 c("aph2b",	"aminoglycoside phosphotransferase", "aph2''", "aminoglycoside"),
+                                 c("aph3p",	"aminoglycoside phosphotransferase", "aph3'", "aminoglycoside"), 
+                                 c("aph6p",	"aminoglycoside phosphotransferase", "aph6'", "aminoglycoside"),
+                                 c("class_a",	"beta-lactamase A",	"beta-lactamase A", "beta-lactamase"), 
+                                 c("class_b1_b2",	"beta-lactamase B",	"beta-lactamase B1B2", "beta-lactamase"),
+                                 c("class_b3",	"beta-lactamase B",	"beta-lactamase B3", "beta-lactamase"), 
+                                 c("class_c",	"beta-lactamase C",	"beta-lactamase C", "beta-lactamase"),
+                                 c("class_d1",	"beta-lactamase D",	"beta-lactamase D", "beta-lactamase"), 
+                                 c("class_d2",	"beta-lactamase D",	"beta-lactamase D", "beta-lactamase"),
+                                 c("erm_1",	"macrolide erm", "erm", "macrolide"), 
+                                 c("erm_2",	"macrolide erm", "erm",	'macrolide'),
+                                 c("mph",	"macrolide mph", "mph",	"macrolide"), 
+                                 c("qnr",	"qrn", "qnr", "qnr"), 
+                                 c("tet_efflux",	"tetracycline efflux pump", "tet efflux", "tetracycline"),
+                                 c("tet_enzyme",	"tetracycline inactivating enzymes", "tet enzyme", "tetracycline"),
+                                 c("tet_rpg",	"tetracycline ribosomal protection genes", "tet rpg", "tetracycline")))
 
 metadata <- readxl::read_excel("../resource_generation/12_ARGs_fARGene/supp1_sample_metadata.xlsx")
 metadata <- metadata %>% mutate(Sample_id = gsub("ample", "", Sample_id)) 
