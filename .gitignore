@@ -167,3 +167,5 @@ cython_debug/
 */*/*/*/.DS_Store
 resource_generation/12_ARGs_fARGene/Assembly
 resource_generation/12_ARGs_fARGene/Genes
+resource_generation/12_ARGs_fARGene/assembly_info_mag.tsv
+resource_generation/12_ARGs_fARGene/assembly_info_mag.tsv.gz

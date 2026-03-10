@@ -1,0 +1,13 @@
+Resistance gene	Identity	Alignment Length/Gene Length	Coverage	Position in reference	Contig	Position in contig	Phenotype	Accession no.
+aac(3)-Ia	99.57	465/534	87.07865168539325	70..534	cpsnj08@@@aac3_1@@@contig_95262_polypolish	1..465	Gentamicin, Astromicin, Fortimicin	X15852
+blaTEM-116	100.00	861/861	100.0	1..861	cpsnj02@@@class_a@@@contig_63167_polypolish	1..861	Amoxicillin, Ampicillin, Cephalothin, Piperacillin, Ticarcillin	AY425988
+blaTEM-116	100.00	861/861	100.0	1..861	cpsnj08@@@class_a@@@contig_91936_polypolish	1..861	Amoxicillin, Ampicillin, Cephalothin, Piperacillin, Ticarcillin	AY425988
+blaOXA-427	88.59	789/795	98.9937106918239	1..788	s23@@@class_d1@@@contig_32818_polypolish	1..788	Amoxicillin, Ampicillin, Aztreonam, Cefepime, Ceftazidime, Ertapenem, Imipenem, Meropenem, Piperacillin, Piperacillin+Tazobactam, Temocillin	KX827604
+blaSGM-4	80.05	872/930	91.39784946236558	70..930	s26@@@class_a@@@contig_18630_polypolish	76..936	Unknown Beta-lactam	CP002798
+blaJOHN-1	81.85	744/747	99.06291834002677	1..742	snj08@@@class_b1_b2@@@contig_56211_polypolish	1..742	Amoxicillin, Amoxicillin+Clavulanic acid, Ampicillin, Ampicillin+Clavulanic acid, Cefotaxime, Cefoxitin, Ceftazidime, Ertapenem, Imipenem, Meropenem, Piperacillin, Piperacillin+Tazobactam	AY028464
+blaJOHN-1	82.11	710/747	94.51137884872824	1..708	snj14@@@class_b1_b2@@@contig_47095_polypolish	1..708	Amoxicillin, Amoxicillin+Clavulanic acid, Ampicillin, Ampicillin+Clavulanic acid, Cefotaxime, Cefoxitin, Ceftazidime, Ertapenem, Imipenem, Meropenem, Piperacillin, Piperacillin+Tazobactam	AY028464
+blaSGM-2	81.29	866/936	90.5982905982906	76..932	snj16@@@class_a@@@contig_14669_polypolish	85..941	Unknown Beta-lactam	AP010803
+blaJOHN-1	81.06	660/747	87.68406961178046	51..708	snj20@@@class_b1_b2@@@contig_17748_polypolish	52..708	Amoxicillin, Amoxicillin+Clavulanic acid, Ampicillin, Ampicillin+Clavulanic acid, Cefotaxime, Cefoxitin, Ceftazidime, Ertapenem, Imipenem, Meropenem, Piperacillin, Piperacillin+Tazobactam	AY028464
+tet(O/W/32/O)	100.00	1920/1920	100.0	1..1920	cpsnj01@@@tet_rpg@@@contig_62473_polypolish	1..1920	Doxycycline, Tetracycline, Minocycline	FM164392
+tet(54)	80.02	1151/1167	97.00085689802913	25..1167	cpsnj16@@@tet_enzyme@@@contig_50016_polypolish	1..1140	Tetracycline	KR857688
+tet(54)	80.41	1164/1167	98.80034275921166	11..1167	cpsnj20@@@tet_enzyme@@@contig_26643_polypolish	11..1170	Tetracycline	KR857688
