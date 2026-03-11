@@ -80,7 +80,11 @@ fasta_df <- data.frame(
   stringsAsFactors = FALSE
 )
 
+
 genes <- genes %>% left_join(fasta_df, by = "orf")
+
+resfinder <- read.delim("~/Documents/GitHub/urban_soil/resource_generation/12_ARGs_fARGene/contigs/ResFinder_results_tab.txt")
+genes <- genes %>% mutate(resfinder = resfinder$Resistance.gene[match(orf , resfinder$Contig)])
 
 write.table(
   genes,
@@ -89,5 +93,8 @@ write.table(
   row.names = FALSE,
   quote = FALSE
 )
+
+
+
 
 
