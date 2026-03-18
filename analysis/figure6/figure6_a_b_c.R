@@ -330,35 +330,34 @@ qantiles <- genes %>%
   summarise(q25 = quantile(n, 0.25), q75 = quantile(n, 0.75))
 
 
+perc_5_95 <- function(x) {
+  stats <- quantile(x, probs = c(0.05, 0.25, 0.5, 0.75, 0.95))
+  names(stats) <- c("ymin", "lower", "middle", "upper", "ymax")
+  return(stats)
+}
+
+nsamples <- genes %>% 
+  group_by(City) %>% 
+  summarise(n = n_distinct(sample))
+
+max_n <- max(genes %>% 
+  group_by(City, Location, sample) %>% 
+  summarise(n = n_distinct(centroid)) %>% 
+  ungroup() %>% 
+  pull(n))
+
 box2 <- genes %>% 
   group_by(City, Location, sample) %>% 
   summarise(n = n_distinct(centroid)) %>% 
   ggplot(aes(x = City, y = n, fill = City)) +
-  #geom_rect(data = genes_per_city,
-  #          aes(xmin = 0, xmax = as.numeric(factor(City)) + 0.4, 
-  #              ymin = 0, ymax = n, fill = City), alpha = 0.3,
-  #          inherit.aes = FALSE, color = "black", linewidth =  0.2,
-  #          show.legend = F) +
-  #geom_rect(data = qantiles,
-  #          aes(xmin = as.numeric(factor(City)) + 2, 
-  #              xmax = 5, 
-  #              ymin = q25*10, ymax = q75*10, fill = City), alpha = 0.3,
-  #          inherit.aes = FALSE, color = "black", linewidth =  0.2,
-  #          show.legend = F) +
-  #geom_col(data = genes_per_city, aes(x = City, y = n, fill = City),  
-  #         width = 0.8, color = "black", show.legend = F) +
-  geom_boxplot(show.legend = F) +
+  stat_summary(fun.data = perc_5_95, geom = "boxplot", show.legend = F, width = 0.7) +
   scale_y_continuous(labels = label_comma()) +
+  geom_text(data = nsamples, aes(x = City, y = max_n+20, label = paste0("n = ",n)), 
+            size = general_size / ggplot2::.pt, vjust = 0, hjust = 0.5) +
   geom_jitter(color = "black", height = 0, width = 0.3, show.legend = F) + 
   xlab("") + 
   scale_fill_manual(values = pal_8[c(1,2,1,2)], labels = function(x) gsub(" ", "\n", x))  +
   theme_minimal() + 
-  #scale_x_discrete(labels = function(x) {
-  #  x <- gsub("-", "-\n", x)
-  #  x <- gsub(" ", "\n", x)
-  #  x}) + 
-  #scale_y_continuous(name = "ARGs per city",
-  #                   sec.axis = sec_axis(~ . / 10, name = "ARGs per sample")) +
   ylab("ARGs per sample") + 
   theme(
     legend.position = "bottom",
@@ -398,7 +397,7 @@ ggsave("figure6/6_a.svg", box2 +
                plot.margin = margin(0, 0, 0, 0), 
                panel.spacing = unit(5, "mm")) +
          ggtitle("A"), 
-       width = 90, height = 100, unit = "mm")
+       width = 70, height = 100, unit = "mm")
 
 
 
