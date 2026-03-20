@@ -101,7 +101,12 @@ plot_genes_per_class_contig <- genes %>%
   group_by(City, centroid) %>% slice_head(n = 1) %>% 
   group_by(centroid) %>% slice_head(n = 1) %>% 
   ggplot(aes(x = class, fill = hclass, pattern = City)) +
-  geom_bar_pattern( position = "dodge") +
+  geom_bar_pattern( position = position_dodge2(preserve = "single", width = 0.3, padding = 0.1), 
+                    width = 0.85,
+                    pattern_density = 0.15,
+                    pattern_color = "black",
+                    pattern_fill = "black",
+                    pattern_size =  0.3) +
   scale_fill_manual(values = pal_8) +
   scale_pattern_manual(values = c('Shanghai' = 'circle', 'Nanjing' = 'stripe')) + 
   theme_minimal() +
@@ -127,8 +132,8 @@ plot_genes_per_class_contig <- genes %>%
     
     }) + 
   guides(
-    fill = guide_legend(override.aes = list(pattern = "none")),
-    pattern = guide_legend(override.aes = list(fill = "grey70"))
+    fill = "none",
+    pattern = guide_legend(override.aes = list(fill = pal_8[8]))
   ) +
   theme(
     legend.position = "bottom",
@@ -136,7 +141,7 @@ plot_genes_per_class_contig <- genes %>%
     title = element_text(size = general_size + 2, face = "bold"),
     strip.text = element_text(size = general_size , face = "bold"),
     axis.title = element_text(size = general_size , face = "bold"),
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = general_size),
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.1, size = general_size),
     axis.text.y = element_text(size = general_size),
     plot.background = element_blank(),
     panel.background = element_blank(),
@@ -144,6 +149,6 @@ plot_genes_per_class_contig <- genes %>%
 
 plot_genes_per_class_contig
 
-ggsave("supp9/s9.svg", plot_genes_per_class_contig + theme(legend.position = "none"), width = 180, height = 70, unit = "mm")
+ggsave("supp8/s8.svg", plot_genes_per_class_contig, width = 180, height = 70, unit = "mm")
 
 
