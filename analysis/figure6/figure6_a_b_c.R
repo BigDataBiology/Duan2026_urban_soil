@@ -346,6 +346,12 @@ max_n <- max(genes %>%
   ungroup() %>% 
   pull(n))
 
+table_plot <- genes %>% 
+  group_by(City, Location, sample) %>% 
+  summarise(n = n_distinct(centroid))
+
+write.csv( table_plot, "figure6/table_6a.csv")
+
 box2 <- genes %>% 
   group_by(City, Location, sample) %>% 
   summarise(n = n_distinct(centroid)) %>% 
