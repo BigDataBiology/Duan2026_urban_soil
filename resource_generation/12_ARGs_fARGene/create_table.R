@@ -1,5 +1,4 @@
 library(dplyr)
-library(Biostrings)
 
 
 
@@ -85,6 +84,20 @@ genes <- genes %>% left_join(fasta_df, by = "orf")
 
 resfinder <- read.delim("~/Documents/GitHub/urban_soil/resource_generation/12_ARGs_fARGene/contigs/ResFinder_results_tab.txt")
 genes <- genes %>% mutate(resfinder = resfinder$Resistance.gene[match(orf , resfinder$Contig)])
+
+
+blast <- read.delim("~/Documents/GitHub/urban_soil/resource_generation/12_ARGs_fARGene/contigs/blast_genes_contigs.tsv", header = F)
+
+v1 <- gsub("_1[0-9]$","",sapply(strsplit(blast$V1, split = "@@@"), function(x) x[3]))
+v1 <- gsub("_[0-9]$","", v1)
+
+blast <- blast[v1 == blast$V2,]
+
+genes <- genes %>% mutate(start = blast$V9[match(orf, blast$V1)]) %>% 
+  mutate(end = blast$V10[match(orf, blast$V1)])
+
+genes <- genes %>% mutate(gsub("aph6p","aph6",orf))
+genes <- genes %>% mutate(gsub("aph6p","aph6",centroid))
 
 write.table(
   genes,
