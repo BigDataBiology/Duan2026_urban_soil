@@ -1,8 +1,14 @@
 # Long-read metagenomic sequencing reveals novel lineages and functional diversity in urban soil microbiome
 
-This repository contains files and scripts to generate analysis and figures in the manuscript _Long-read metagenomic sequencing reveals novel lineages and functional diversity in urban soil microbiome_:
+This repository contains files and scripts to generate analysis and figures for the manuscript
 
-> Yiqian Duan, Anna Cuscó, Chengkai Zhu, Juan S. Inda-Díaz, Yaozhong Zhang, Alexandre Areias Castro, Xinrun Yang, Jiabao Yu, Gaofei Jiang, Xing-Ming Zhao, Luis Pedro Coelho
+
+> **Long-read metagenomic sequencing reveals novel lineages and functional
+> diversity in urban soil microbiomes** by Yiqian Duan, Anna Cuscó, Chengkai
+> Zhu, Juan S. Inda-Díaz, Yaozhong Zhang, Alexandre Areias Castro, Xinrun Yang,
+> Jiabao Yu, Gaofei Jiang, Xing-Ming Zhao, and Luis Pedro Coelho
+>
+> bioRxiv 2026.03.20.713087; [doi:10.64898/2026.03.20.713087](https://doi.org/10.64898/2026.03.20.713087)
 
 See also the **MAG collection** at the [Urban soil MAG collection
 website](https://urban-soil-mags.netlify.app/).
