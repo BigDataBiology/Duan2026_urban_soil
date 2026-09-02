@@ -479,11 +479,14 @@ write.csv(results_mod_gene_location2, "supp9/DR-genelen-depth-q2-location.csv", 
 
 "number_ARGs_per_sample.csv"
 
-write.csv( sr_genes %>% group_by(City, Location, sample) %>% summarise(n=n_distinct(centroid)), "supp9/number_ARGs_per_sample_SR.csv")
+
 
 m <- sr_genes %>% mutate(sum_len = contig_stat$sum_len[match(sample, contig_stat$sample)],
                     Q2 = contig_stat$Q2[match(sample, contig_stat$sample)]) %>% 
   group_by(City, Location, sample) %>% summarise(n=n_distinct(centroid), Q2 = Q2[1], sum_len = sum_len[1])
+
+write.csv( m %>% dplyr::select(-n), "supp9/number_ARGs_per_sample_SR.csv")
+
 
 plot(m$Q2, m$n)
 plot(log(m$sum_len), m$n)
@@ -530,4 +533,5 @@ legend("topright", legend = levels(factor(m$City)),
        col = 1:length(unique(m$City)), pch = 19)
 
 results_sr_model <- tidy_model(mod_sr)
+
 write.csv(results_sr_model, "supp9/nARGS_SR-depth-q2.csv", row.names = FALSE)
