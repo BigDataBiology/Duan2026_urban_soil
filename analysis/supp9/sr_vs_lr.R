@@ -59,6 +59,27 @@ gene_classes_2 <- data.frame(rbind(
 metadata <- readxl::read_excel("../resource_generation/12_ARGs_fARGene/supp1_sample_metadata.xlsx")
 metadata <- metadata %>% mutate(Sample_id = gsub("ample", "", Sample_id)) 
 
+centroids <- read.table("../resource_generation/12_ARGs_fARGene/contigs/orfs-amino-centroids.txt", quote="\"", comment.char="")
+lr_genes <- read.table("../resource_generation/12_ARGs_fARGene/contigs/closest_hits_orfs_amino.tsv", quote="\"", comment.char="")
+lr_genes <- lr_genes %>% rename(orf = V1, centroid = V2) %>% select(orf, centroid)
+lr_genes <- lr_genes %>% mutate(centroid = ifelse(orf %in% centroids$V1, orf, centroid))
+
+lr_genes$sample <- sapply(strsplit(lr_genes$orf, split = "@@@"), function(x) x[1])
+lr_genes$hmm <- sapply(strsplit(lr_genes$orf, split = "@@@"), function(x) x[2])
+lr_genes$c_hmm <- sapply(strsplit(lr_genes$centroid, split = "@@@"), function(x) x[2])
+lr_genes$sequence <- sapply(strsplit(lr_genes$orf, split = "@@@"), function(x) x[3])
+lr_genes$contig <- sapply(strsplit(lr_genes$sequence, split = "_"), function(x) paste(x[1], x[2], x[3], sep = "_"))
+lr_genes <- lr_genes %>% mutate(hmm = c_hmm)
+lr_genes$c_hmm <- NULL
+
+lr_genes <- lr_genes %>% mutate(description = gene_classes$X2[match(hmm, gene_classes$X1)],
+                          class = gene_classes$X3[match(hmm, gene_classes$X1)],
+                          hclass = gene_classes$X4[match(hmm, gene_classes$X1)],
+                          City = metadata$City[match(sample, metadata$Sample_id)],
+                          Location = metadata$Location[match(sample, metadata$Sample_id)],
+                          Date = metadata$Date[match(sample, metadata$Sample_id)],
+                          Longitude = metadata$Longitude[match(sample, metadata$Sample_id)],
+                          Latitude = metadata$Latitude[match(sample, metadata$Sample_id)])
 
 ## centroids_sr each of the genes found in sr clustered
 centroids_sr <- read.table("../resource_generation/12_ARGs_fARGene/sr_contigs/cluster_membership_sr.tsv", quote="\"", comment.char="")
@@ -166,7 +187,7 @@ gene_length_lr_2 <- gene_length_lr %>%
   mutate(sr80 = ifelse(header %in% blasted_lr_vs_sr$V1[blasted_lr_vs_sr$V3 > 80 & blasted_lr_vs_sr$V13 > 80], 1, 0),
          sr50 = ifelse(header %in% blasted_lr_vs_sr$V1[blasted_lr_vs_sr$V3 > 50 & blasted_lr_vs_sr$V13 > 50], 1, 0))
 
-
+lr_genes
 
 # summary per gene class across all samples
 gn_summary1 <- gene_length_lr_2 %>% 
