@@ -72,8 +72,8 @@ genes <- genes %>%
 
 ## remove sample s4 and s11
 
-genes <- genes %>% 
-  filter(!sample %in% c("s4", "s11"))
+#genes <- genes %>% 
+#  filter(!sample %in% c("s4", "s11"))
 
 
 # font for plots 
@@ -350,7 +350,8 @@ table_plot <- genes %>%
   group_by(City, Location, sample) %>% 
   summarise(n = n_distinct(centroid))
 
-write.csv( table_plot, "figure6/table_6a.csv")
+
+write.csv( table_plot, "figure6/number_ARGs_per_sample.csv")
 
 box2 <- genes %>% 
   group_by(City, Location, sample) %>% 
@@ -439,10 +440,62 @@ grid.arrange(box2 +
              nrow = 1)
 
 
+##########################################################################################
+##########################################################################################
+##########################################################################################
 
-#+
-#  theme_minimal()
 
-##########################################################################################
-##########################################################################################
-##########################################################################################
+
+library(uwot)
+library(Matrix)
+library(vegan)
+
+build_composition_matrix <- function(gene_tbl, weighted = FALSE) {
+  if (weighted) {
+    tbl <- gene_tbl %>%
+      count(sample, centroid, name = "n_hits") %>%
+      pivot_wider(names_from = centroid, values_from = n_hits, values_fill = 0)
+  } else {
+    tbl <- gene_tbl %>%
+      distinct(sample, centroid) %>%
+      mutate(present = 1) %>%
+      pivot_wider(names_from = centroid, values_from = present, values_fill = 0)
+  }
+  mat <- as.matrix(tbl[, -1])
+  rownames(mat) <- tbl$sample
+  mat
+}
+
+pa_mat    <- build_composition_matrix(genes, weighted = FALSE)
+
+set.seed(2026)
+jacc_dist <- vegdist(pa_mat, method = "jaccard", binary = TRUE)
+pcoa <- cmdscale(jacc_dist, k = 2, eig = TRUE, add = TRUE)
+pcoa_df <- as.data.frame(pcoa$points)
+colnames(pcoa_df) <- c("PCo1", "PCo2")
+pcoa_df$sample   <- rownames(pa_mat)
+pcoa_df$City     <- metadata$City[match(pcoa_df$sample, metadata$Sample_id)]
+pcoa_df$Location <- metadata$Location[match(pcoa_df$sample, metadata$Sample_id)]
+
+eig  <- pcoa$eig
+pct1 <- round(100 * eig[1] / sum(eig[eig > 0]), 1)
+pct2 <- round(100 * eig[2] / sum(eig[eig > 0]), 1)
+
+
+#locations  <- sort(unique(metadata$Location[match(sample_order, metadata$Sample_id)]))
+
+pcoa_plot <- ggplot(pcoa_df, aes(PCo1, PCo2, color = City, shape = Location)) +
+  geom_point(size = 3) +
+  scale_color_manual(values = setNames(pal_8[1:2], cities)) +
+  #scale_shape_manual(values = c(16, 17, 15, 18, 3, 4, 8)[seq_along(locations)]) +
+  labs(x = paste0("PCo1 (", pct1, "%)"), y = paste0("PCo2 (", pct2, "%)"),
+       title = "PCoA (Jaccard)") +
+  theme_minimal()
+
+ggsave("figure6/pcoa_args.svg", pcoa_plot +
+         theme(plot.margin = margin(0, 0, 0, 0), 
+               panel.spacing = unit(5, "mm")),
+       width = 140, height = 100, unit = "mm")
+
+
+write.csv( pcoa_df, "figure6/PCoA_ARGs.csv")

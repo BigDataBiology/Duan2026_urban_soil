@@ -96,8 +96,8 @@ blast <- blast[v1 == blast$V2,]
 genes <- genes %>% mutate(start = blast$V9[match(orf, blast$V1)]) %>% 
   mutate(end = blast$V10[match(orf, blast$V1)])
 
-genes <- genes %>% mutate(gsub("aph6p","aph6",orf))
-genes <- genes %>% mutate(gsub("aph6p","aph6",centroid))
+genes <- genes %>% mutate(orf = gsub("aph6p","aph6",orf))
+genes <- genes %>% mutate(centroid = gsub("aph6p","aph6",centroid))
 
 write.table(
   genes,
