@@ -490,17 +490,17 @@ write.csv( m %>% dplyr::select(-n), "supp9/number_ARGs_per_sample_SR.csv")
 
 plot(m$Q2, m$n)
 plot(log(m$sum_len), m$n)
-ggplot(m, aes(x = log(sum_len), y = n, color = City)) +
-  geom_point()
 
 ggplot(m, aes(x = log(sum_len), y = n, color = City)) +
   geom_point()
+
 
 ggplot(m, aes(x = Q2, y = n, color = City)) +
   geom_point()
 
 ggplot(m, aes(x = log(sum_len), y = Q2, color = City)) +
   geom_point()
+
 
 
 mod_sr  <- lm(n ~ log(sum_len) + log(Q2), data = m)
@@ -510,9 +510,9 @@ library(plotly)
 city_levels <- levels(factor(m$City))
 
 m$n_ARGs <- m$n
-plot_ly(m, x = ~log(sum_len), y = ~log(Q2), z = ~n_ARGs, color = ~City,
+plot_ly(m[log(m$sum_len)>20,], x = ~log(sum_len), y = ~log(Q2), z = ~n_ARGs, color = ~City,
         colors = pal_8[1:length(city_levels)],
-        type = "scatter3d", mode = "markers", marker = list(size = 4)) %>%
+        type = "scatter3d", mode = "markers+lines", marker = list(size = 4)) %>%
   plotly::layout(scene = list(
     xaxis = list(title = "log(sum_len)"),
     yaxis = list(title = "log(Q2)"),
@@ -520,18 +520,41 @@ plot_ly(m, x = ~log(sum_len), y = ~log(Q2), z = ~n_ARGs, color = ~City,
   ))
 
 
+ggplot(m, aes(x = log(sum_len), y = log(Q2))) +
+  geom_point(aes(size = n_ARGs, fill = n_ARGs, shape = City), color = "black", alpha = 0.8) +
+  scale_fill_fermenter(palette = "YlOrBr", direction = 1, n.breaks = 8) +
+  scale_shape_manual(values = c(21, 24)) +
+  scale_size_continuous(range = c(1, 20)) +
+  labs(
+    x = "log(sum_len)",
+    y = "log(Q2)",
+    size = "n_ARGs",
+    fill = "n_ARGs",
+    shape = "City"
+  ) +
+  theme_minimal()
 
-library(scatterplot3d)
+p_nargs_sr <- ggplot(m, aes(x = log(sum_len), y = log(Q2))) +
+  geom_point(aes(size = n_ARGs, fill = n_ARGs, shape = City), color = "black", alpha = 0.8) +
+  ggrepel::geom_text_repel(
+    data = m %>% filter(log(sum_len) < 20),
+    aes(x = log(sum_len), y = log(Q2), label = paste(sample, City, Location)),
+    size = 3, inherit.aes = FALSE
+  ) +
+  scale_fill_fermenter(palette = "YlOrBr", direction = 1, n.breaks = 8) +
+  scale_shape_manual(values = c(21, 24)) +
+  scale_size_continuous(range = c(1, 18)) +
+  labs(
+    x = "log(Total number of bp in assembly)",
+    y = "log(Median contig length)",
+    size = "Number of ARGs",
+    fill = "Number of ARGs",
+    shape = "City"
+  ) +
+  theme_minimal()
 
-city_levels <- levels(factor(m$City))
-city_colors <- pal_8[1:length(city_levels)]
-colors <- city_colors[as.numeric(factor(m$City))]
-s3d <- scatterplot3d(log(m$sum_len), log(m$Q2), m$n,
-                     color = colors, pch = 19, angle = 20,
-                     xlab = "log(sum_len)", ylab = "log(Q2)", zlab = "n")
-legend("topright", legend = levels(factor(m$City)),
-       col = 1:length(unique(m$City)), pch = 19)
-
-results_sr_model <- tidy_model(mod_sr)
+svg("supp9/SR_n_args_depth_q2.svg", width = 10, height = 8)
+p_nargs_sr
+dev.off()
 
 write.csv(results_sr_model, "supp9/nARGS_SR-depth-q2.csv", row.names = FALSE)
