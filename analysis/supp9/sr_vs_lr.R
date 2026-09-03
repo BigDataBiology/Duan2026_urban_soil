@@ -395,6 +395,7 @@ sr_genes_summary2 <- sr_genes %>%
   mutate(r = n/N)
 
 
+
 p5.1 <- ggplot(sr_genes_summary2 %>% mutate(label = ifelse(label == "H", "High", ifelse(label == "L", "low", "unaligned"))) , 
              aes(x = r, y = class , fill = forcats::fct_rev(label))) +
   geom_col() +
@@ -420,6 +421,7 @@ p5.2 <- ggplot(sr_genes_summary2 %>% mutate(label = ifelse(label == "H", "High",
   scale_x_continuous(limits = c(0, 4000)) +
   theme_minimal()
 
+write.csv(sr_genes_summary2 %>% select(-mean_len), "supp9/sample-to-sample-alignment-quality-SR-to-LR-summary.csv", row.names = FALSE)
 
 p5 <- grid.arrange(p5.1 , p5.2 + theme(legend.position = "none", axis.text.y = element_blank()), nrow = 1) 
 
@@ -558,3 +560,10 @@ p_nargs_sr
 dev.off()
 
 write.csv(results_sr_model, "supp9/nARGS_SR-depth-q2.csv", row.names = FALSE)
+
+
+sr_genes
+lr_genes
+
+
+
