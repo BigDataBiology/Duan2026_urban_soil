@@ -1,4 +1,4 @@
-singlem summarise --input-otu-tables /data/yiqian/soil/pipeline/06_profile/*/otutable.tsv --output-otu-table all_otu_table.csv
+singlem summarise --input-otu-tables ~/06_profile/*/otutable.tsv --output-otu-table all_otu_table.csv
 singlem summarise --input-otu-table all_otu_table.csv --unifrac-by-otu all_otu_table
 for f in *.unifrac
   do
