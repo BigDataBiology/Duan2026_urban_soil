@@ -1,0 +1,59 @@
+"","City","Location","sample","Q2","sum_len","n_ARGs"
+"1","Nanjing","Nanjing Agricultural University","cpsnj01",25999,3172259579,545
+"2","Nanjing","Nanjing Agricultural University","cpsnj02",31778,3633343375,527
+"3","Nanjing","Nanjing Agricultural University","cpsnj03",33614,3424897543,669
+"4","Nanjing","Nanjing Agricultural University","cpsnj04",35594,4976442971,879
+"5","Nanjing","Nanjing Agricultural University","snj01",28670,3213417995,473
+"6","Nanjing","Nanjing Agricultural University","snj02",27363,3506150033,456
+"7","Nanjing","Nanjing Agricultural University","snj03",29181,3208832565,594
+"8","Nanjing","Nanjing Agricultural University","snj04",27129,4277254129,686
+"9","Nanjing","Sun Yat-sen Mausoleum","cpsnj08",23480.5,3625300625,638
+"10","Nanjing","Sun Yat-sen Mausoleum","cpsnj09",37609.5,5181252126,1075
+"11","Nanjing","Sun Yat-sen Mausoleum","cpsnj10",37132,4169084399,838
+"12","Nanjing","Sun Yat-sen Mausoleum","cpsnj11",39347,4095664916,813
+"13","Nanjing","Sun Yat-sen Mausoleum","cpsnj13",37356,3405523185,642
+"14","Nanjing","Sun Yat-sen Mausoleum","cpsnj14",40116,4260133687,810
+"15","Nanjing","Sun Yat-sen Mausoleum","cpsnj15",33018.5,3725431046,499
+"16","Nanjing","Sun Yat-sen Mausoleum","cpsnj16",38935,3172492952,593
+"17","Nanjing","Sun Yat-sen Mausoleum","cpsnj19",34461,4410244165,719
+"18","Nanjing","Sun Yat-sen Mausoleum","cpsnj20",35784,3200145390,509
+"19","Nanjing","Sun Yat-sen Mausoleum","snj08",34413.5,4398226450,882
+"20","Nanjing","Sun Yat-sen Mausoleum","snj09",37119.5,4319749256,854
+"21","Nanjing","Sun Yat-sen Mausoleum","snj10",35711,3642691722,599
+"22","Nanjing","Sun Yat-sen Mausoleum","snj11",34091,4526249341,846
+"23","Nanjing","Sun Yat-sen Mausoleum","snj13",37139.5,4446610697,671
+"24","Nanjing","Sun Yat-sen Mausoleum","snj14",36114,4056822405,689
+"25","Nanjing","Sun Yat-sen Mausoleum","snj15",37034,4493750250,612
+"26","Nanjing","Sun Yat-sen Mausoleum","snj16",35347,2829059081,542
+"27","Nanjing","Sun Yat-sen Mausoleum","snj19",33407,3598690543,667
+"28","Nanjing","Sun Yat-sen Mausoleum","snj20",29471,4100908951,783
+"29","Shanghai","Fudan University","s1",19735,5888680564,654
+"30","Shanghai","Fudan University","s2",19117.5,3133125221,370
+"31","Shanghai","Fudan University","s3",17528,4260838482,550
+"32","Shanghai","Fudan University","s4",20360,4496133102,566
+"33","Shanghai","Fudan University","s5",19102,4123139478,594
+"34","Shanghai","Fudan University","s6",25621.5,4348653832,833
+"35","Shanghai","Fudan University","s7",26984.5,4489389191,751
+"36","Shanghai","Fudan University","s8",27377,5122505880,693
+"37","Shanghai","Fudan University","s9",27072,3821451852,651
+"38","Shanghai","GongQing Forest Park","s10",23403.5,3611609446,607
+"39","Shanghai","GongQing Forest Park","s11",23435,4157905415,584
+"40","Shanghai","GongQing Forest Park","s12",23634,3180746334,385
+"41","Shanghai","GongQing Forest Park","s13",24152,4338877864,644
+"42","Shanghai","GongQing Forest Park","s14",25328,4085142275,661
+"43","Shanghai","GongQing Forest Park","s15",26229,4809900601,764
+"44","Shanghai","GongQing Forest Park","s16",26485,4719630997,751
+"45","Shanghai","GongQing Forest Park","s17",24077.5,4238105844,629
+"46","Shanghai","GongQing Forest Park","s18",33420,4904737504,968
+"47","Shanghai","HuangXing Park","s19",34843,3682106155,388
+"48","Shanghai","HuangXing Park","s20",43918,4637840427,774
+"49","Shanghai","HuangXing Park","s21",33255,3856924418,561
+"50","Shanghai","HuangXing Park","s22",42525.5,3362601628,499
+"51","Shanghai","ShiJi Park","s23",43416,3519399766,610
+"52","Shanghai","ShiJi Park","s24",21418.5,3386141910,523
+"53","Shanghai","ShiJi Park","s25",22624,4355504831,630
+"54","Shanghai","ShiJi Park","s26",20150,3933873495,574
+"55","Shanghai","ShiJi Park","s27",20956,4563718736,766
+"56","Shanghai","ShiJi Park","s28",20613,4130517289,708
+"57","Shanghai","ShiJi Park","s29",37743,3429326329,531
+"58","Shanghai","ShiJi Park","s30",20448,3635241805,521
