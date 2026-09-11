@@ -272,6 +272,7 @@ p1 <- ggplot(gn_summary1, aes(x = mean_len, y = detect_rate80 , color = !class %
 
 p1
 
+write.csv(gn_summary1, "supp9/Detection_rate_80ID_80Coverage_of_LR_in_SR.csv")
 
 
 p2 <-  gene_length_lr_2 %>% mutate(sr80 = ifelse(sr80==0, "Not detected","Detected")) %>% 
