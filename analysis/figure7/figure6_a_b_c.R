@@ -341,10 +341,10 @@ nsamples <- genes %>%
   summarise(n = n_distinct(sample))
 
 max_n <- max(genes %>% 
-  group_by(City, Location, sample) %>% 
-  summarise(n = n_distinct(centroid)) %>% 
-  ungroup() %>% 
-  pull(n))
+               group_by(City, Location, sample) %>% 
+               summarise(n = n_distinct(centroid)) %>% 
+               ungroup() %>% 
+               pull(n))
 
 table_plot <- genes %>% 
   group_by(City, Location, sample) %>% 
@@ -443,6 +443,36 @@ grid.arrange(box2 +
 ##########################################################################################
 ##########################################################################################
 ##########################################################################################
+
+
+per_sample_centroids <- lapply(split(genes$centroid, genes$sample), unique)
+all_samples <- names(per_sample_centroids)
+n <- length(all_samples)
+max_j <- min(58, n)
+
+grid <- expand.grid(j = seq_len(max_j), k = seq_len(50))
+
+out <- Map(function(j, k) {
+  chosen <- all_samples[sample.int(n, size = j, replace = FALSE)]
+  c(k = k, j = j, tot = length(unique(unlist(per_sample_centroids[chosen]))))
+}, grid$j, grid$k)
+
+results_genes <- as.data.frame(do.call(rbind, out))
+
+summary_genes <- results_genes %>%
+  group_by(j) %>%
+  summarise(mean_tot = mean(tot), sd_tot = sd(tot), .groups = "drop")
+
+ggplot(summary_genes, aes(x = j, y = mean_tot)) +
+  geom_ribbon(aes(ymin = mean_tot - sd_tot, ymax = mean_tot + sd_tot), alpha = 0.2) +
+  geom_line(linewidth = 1) +
+  labs(x = "Number of samples (j)", y = "Unique centroids") +
+  theme_minimal()
+
+write.csv(results_genes %>% mutate(dataset = "UrbanSoil"), file = "~/Documents/GitHub/urban_soil/resource_generation/12_ARGs_fARGene/incremental_curve_soil.csv", row.names = F)
+
+########
+
 
 
 

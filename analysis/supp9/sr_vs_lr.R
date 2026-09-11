@@ -61,7 +61,7 @@ metadata <- metadata %>% mutate(Sample_id = gsub("ample", "", Sample_id))
 
 centroids <- read.table("../resource_generation/12_ARGs_fARGene/contigs/orfs-amino-centroids.txt", quote="\"", comment.char="")
 lr_genes <- read.table("../resource_generation/12_ARGs_fARGene/contigs/closest_hits_orfs_amino.tsv", quote="\"", comment.char="")
-lr_genes <- lr_genes %>% rename(orf = V1, centroid = V2) %>% select(orf, centroid)
+lr_genes <- lr_genes %>% rename(orf = V1, centroid = V2) %>% dplyr::select(orf, centroid)
 lr_genes <- lr_genes %>% mutate(centroid = ifelse(orf %in% centroids$V1, orf, centroid))
 
 lr_genes$sample <- sapply(strsplit(lr_genes$orf, split = "@@@"), function(x) x[1])
@@ -215,6 +215,33 @@ gn_summary3 <- gene_length_lr_2 %>%
 
 gn_summary3 <- gn_summary3 %>% left_join(gene_length_sr %>% group_by(class, Location, City) %>% summarise(n_sr = n()) %>% ungroup(), by = c("class","Location", "City")) %>%
   mutate(n_sr =ifelse(is.na(n_sr), 0, n_sr))
+
+
+
+#############################################
+#############################################
+#############################################
+
+per_sample_centroids <- lapply(split(sr_genes$centroid, sr_genes$sample), unique)
+all_samples <- names(per_sample_centroids)
+n <- length(all_samples)
+max_j <- min(58, n)
+
+grid <- expand.grid(j = seq_len(max_j), k = seq_len(50))
+
+out <- Map(function(j, k) {
+  chosen <- all_samples[sample.int(n, size = j, replace = FALSE)]
+  c(k = k, j = j, tot = length(unique(unlist(per_sample_centroids[chosen]))))
+}, grid$j, grid$k)
+
+results_genes <- as.data.frame(do.call(rbind, out))
+
+write.csv(results_genes %>% mutate(dataset = "UrbanSoil - sr"), file = "~/Documents/GitHub/urban_soil/resource_generation/12_ARGs_fARGene/incremental_curve_soil_sr.csv", row.names = F)
+
+#############################################
+#############################################
+#############################################
+
 
 # number of args per class
 tbl_data <- gn_summary1 %>% arrange(desc(n_lr)) %>% dplyr::select(class, n_lr, n_sr)
@@ -421,7 +448,7 @@ p5.2 <- ggplot(sr_genes_summary2 %>% mutate(label = ifelse(label == "H", "High",
   scale_x_continuous(limits = c(0, 4000)) +
   theme_minimal()
 
-write.csv(sr_genes_summary2 %>% select(-mean_len), "supp9/sample-to-sample-alignment-quality-SR-to-LR-summary.csv", row.names = FALSE)
+write.csv(sr_genes_summary2 %>% dplyr::select(-mean_len), "supp9/sample-to-sample-alignment-quality-SR-to-LR-summary.csv", row.names = FALSE)
 
 p5 <- grid.arrange(p5.1 , p5.2 + theme(legend.position = "none", axis.text.y = element_blank()), nrow = 1) 
 
